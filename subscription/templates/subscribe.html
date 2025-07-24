@@ -1,0 +1,44 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container text-center my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Subscriber Donation Section with QR Code -->
+      <div class="donation-section border p-4 rounded shadow-sm">
+        <h3>支持我們的項目並成為訂閱者</h3>
+        <p class="lead">
+          誠邀您支持我們網站的營運，只需以手機掃描下方的QR碼，即可輕鬆、安全地捐款。
+          您的支持將協助我們持續提供高質素內容和維護網站正常運作。每一分善款對我們都非常重要，感謝您的慷慨支持！
+        </p>
+        
+        <!-- IMPORTANT: Replace with your actual QR code image path -->
+        <img 
+          src="{% static 'images/donation_qr.jpeg' %}"
+          alt="Scan to donate and subscribe" 
+          style="width:220px; height:auto; display:block; margin:auto; border:1px solid #ccc;" >
+        
+<!--        <div class="alert alert-info mt-4">-->
+<!--          <strong>How It Works:</strong>-->
+<!--          <ol class="text-start">-->
+<!--            <li>Scan the QR code and complete the payment.</li>-->
+<!--            <li>Make sure you are registered and logged into your account.</li>-->
+<!--            <li>Your subscription will be activated by an administrator within 24 hours.</li>-->
+<!--            <li>Once activated, you will be able to comment on all posts.</li>-->
+<!--          </ol>-->
+<!--        </div>-->
+
+        <p class="mt-3">
+<!--            After completing your donation, <br>-->
+<!--            please return and(or register) to enjoy subscriber privileges once approved.-->
+          完成捐款後，請返回並 <a href="{% url 'login' %}">log in</a> 登入（或註冊）帳戶，
+          您將可以在所有文章下發表評論。
+
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

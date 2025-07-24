@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="container-fluid">
+        <!-- Post Content -->
+       <!-- Post Content -->
+    <article>
+        <header class="mb-4 text-center">
+            <!-- REVISED: Category badge is now optional -->
+<!--            {% if post.category %}-->
+<!--                <a class="badge bg-secondary text-decoration-none link-light mb-2" href="#!">{{ post.category.name }}</a>-->
+<!--            {% endif %}-->
+
+            <h3 class="fw-bolder mb-1">{{ post.title }}</h3>
+
+            <div class="text-muted fst-italic mb-2">
+                Posted on {{ post.created_on|date:"F d, Y" }}
+                {% if post.author %}
+                    by {{ post.author.username }}
+                {% endif %}
+            </div>
+        </header>
+
+        <figure class="mb-4">
+            <img class="img-fluid rounded" src="{{ post.main_image.url }}" alt="{{ post.title }}" style="width: 100%; max-height: 500px; object-fit: cover;"/>
+        </figure>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <section class="mb-8">
+                    {{ post.body|safe }}
+                </section>
+            </div>
+        </div>
+    </article>
+
+     {% if post.tradingview_symbol %}
+    <!-- REVISED: Increased top/bottom margin with my-5 -->
+    <div class="tradingview-widget-container my-5">
+        <div id="tradingview_chart"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+        new TradingView.widget({
+          "width": "100%",
+          "height": 600, // REVISED: Made the chart taller
+          "symbol": "{{ post.tradingview_symbol }}",
+          "interval": "D",
+          "timezone": "Etc/UTC",
+          "theme": "light",
+          "style": "1",
+          "locale": "en",
+          "enable_publishing": false,
+          "allow_symbol_change": true,
+          "container_id": "tradingview_chart"
+        });
+        </script>
+    </div>
+    {% endif %}
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-12">
+            <!-- Like and Share Section -->
+            <div class="d-flex align-items-center mb-4">
+                <a href="{% url 'like_post' post.slug %}" class="btn btn-outline-danger me-3">
+                    {% if is_liked %}Unlike{% else %}Like{% endif %} ({{ like_count }})
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="btn btn-primary me-2">Share on Facebook</a>
+                <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ post.title }}" target="_blank" class="btn btn-info">Share on X</a>
+            </div>
+
+            <!-- Comments Section -->
+            <section class="mb-12">
+                <form>
+                    <textarea class="form-control fs-8 mb-3" rows="3" placeholder="Leave a comment..."></textarea>
+                    <button class="btn btn-primary btn-lg">Post Comment</button>
+                </form>
+<!--                <div class="card bg-light">-->
+<!--                    <div class="card-body">-->
+                        <!-- Comment Form & Subscription Prompt -->
+                        <!-- ... (this section remains the same) ... -->
+<!--                    </div>-->
+<!--                </div>-->
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

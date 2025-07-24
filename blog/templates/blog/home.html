@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ========== HOMEPAGE CAROUSEL ========== -->
+<!-- REVISED: Added data-bs-interval for autoplay and data-bs-touch to disable swipe -->
+<div id="postCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000" data-bs-touch="false">
+  <div class="carousel-inner">
+    {% for post in posts %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+
+      <a href="{% url 'post_detail' post.slug %}"
+         data-bs-toggle="modal"
+         data-bs-target="#disclaimerModal"
+         style="cursor: pointer;">
+
+        <img src="{{ post.main_image.url }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="{{ post.title }}">
+
+        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50">
+          <!-- No title displayed here as per previous request -->
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <div class="carousel-item active">
+      <div class="d-flex justify-content-center align-items-center" style="height: 500px; background-color: #f8f9fa;">
+          <p class="text-muted">No posts found.</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Carousel Controls -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#postCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+<!-- ========== DISCLAIMER MODAL ========== -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="disclaimerModalLabel">免責聲明 (Disclaimer)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>本網站所載資料及資訊僅供參考，並不構成任何投資建議、邀約、要約或招攬。所有資訊以「現況」和「現有」基礎提供，本網站不對其準確性、可靠性、及時性、完整性作出任何明示或默示保證。用戶據此作出任何行動須自行承擔風險，本網站及其資訊來源概不對因此所引致的任何損失或損害承擔責任。</p>
+        <p>本網站內亦可能載有連結至第三者網站，該等網站內容並不受本網站控制，本網站亦不對其內容承擔任何責任。投資涉及風險，投資價值可升可跌，過往業績不代表將來表現。用戶應於作出任何投資決定前，諮詢獨立專業顧問意見。</p>
+        <p>本網站保留隨時修改本免責聲明而毋須另行通知的權利。</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉 (Close)</button>
+        <a href="#" id="modalContinueBtn" class="btn btn-primary">繼續閱讀 (Continue to Article)</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+<!-- ========== JAVASCRIPT FOR DYNAMIC MODAL LINK ========== -->
+<script>
+// This script is still required for the disclaimer modal to work correctly.
+document.addEventListener('DOMContentLoaded', function () {
+    const disclaimerModal = document.getElementById('disclaimerModal');
+
+    disclaimerModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const postUrl = button.getAttribute('href');
+        const modalContinueBtn = disclaimerModal.querySelector('#modalContinueBtn');
+        modalContinueBtn.setAttribute('href', postUrl);
+    });
+});
+</script>
+{% endblock %}
